@@ -21,6 +21,8 @@ jobs:
           scope: '@bullrich'
       - run: npm ci
       - run: npm run build
+      - name: clean dependencies
+        run: echo "`jq 'del(.devDependencies) | del(.dependencies)' package.json`" > package.json
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
