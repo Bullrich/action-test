@@ -3,23 +3,14 @@ on:
   pull_request:
     types: [
       'opened',
-      'edited',
-      'reopened',
       'synchronize',
-      'review_requested',
-      'review_request_removed',
-      'assigned',
-      'unassigned',
-      'labeled',
-      'unlabeled',
       ]
 
 jobs:
   build:
     runs-on: ubuntu-latest 
-    permissions: 
-      contents: read
-      packages: write 
+    permissions:
+      packages: read 
     steps:
       - uses: actions/checkout@v3
       # Setup .npmrc file to publish to GitHub Packages
@@ -28,11 +19,8 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
-          scope: '@bullrich'  
-      - name: Set credentials
-        run: |
-          echo '@bullrich:https://npm.pkg.github.com/' > .npmrc
-          echo '//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}' >> .npmrc
+          scope: '@bullrich'
+      - run: cat $NPM_CONFIG_USERCONFIG
       - run: npm install --save @bullrich/action-test
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
