@@ -1,5 +1,8 @@
 name: Publish package to GitHub Packages
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -17,7 +20,10 @@ jobs:
           # Defaults to the user or organization that owns the workflow file
           scope: '@octocat'
       - run: npm ci
-      - run: npm build
+      - run: npm run build
+      - run: |
+          echo @bullrich:https://npm.pkg.github.com/ > .npmrc
+          echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> .npmrc
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
