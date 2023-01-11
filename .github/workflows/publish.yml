@@ -19,10 +19,8 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@bullrich'
-      - run: npm ci
-      - run: npm run build
-      - name: clean dependencies
-        run: echo "`jq 'del(.devDependencies) | del(.dependencies)' package.json`" > package.json
-      - run: npm publish
+      - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
